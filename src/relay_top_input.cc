@@ -22,7 +22,7 @@
 // SOFTWARE.
 // =============================================================================
 
-// File: relay_top.cc
+// File: relay_top_input.cc
 
 #include <relay/relay_top.h>
 
@@ -30,44 +30,13 @@
 
 namespace ilang {
 
-Ila GetRelayIla(const std::string& model_name) {
-  auto m = Ila(model_name);
-
-  // TODO
-  // define top input
-  DefineTopInput(m);
-
-  // define function input
-  DefineFuncInput(m);
-
-  // define architectural states
-  DefineArchState(m);
-
-  // define internal states
-  DefineInternalState(m);
-
-  auto is_func_call = (m.input(RELAY_FUNC_RUN_IN) == RELAY_FUNC_RUN_ON);
-  auto is_valid_func = (m.input(RELAY_FUNC_ID_IN) > 0);
-  m.SetValid(is_func_call & is_valid_func);
-
-  // define Relay instructions
-
-  DefineVectorAdd(m);
-  DefineVectorMultiply(m);
-  DefineVectorSigmoid(m);
-  DefineVectorTanh(m);
-
-  DefineNNDense(m);
-
-  DefineLSTM(m);
-  
-  
-  DefineTensorStore(m);
-  DefineMaxpooling2D(m);
-
-
-  
-  return m;
+void DefineTopInput(Ila& m) {
+  // define top function run input
+  m.NewBvInput(RELAY_FUNC_RUN_IN, RELAY_FUNC_RUN_IN_BITWIDTH);
+  // define top function call id input
+  m.NewBvInput(RELAY_FUNC_ID_IN, RELAY_FUNC_ID_IN_BITWIDTH);
+  // define top data input here
+  m.NewBvInput(RELAY_DATA_IN, RELAY_DATA_IN_BITWIDTH);
 }
 
-}; // namespace ilang
+} // namespace ilang

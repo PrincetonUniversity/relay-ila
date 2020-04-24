@@ -22,52 +22,27 @@
 // SOFTWARE.
 // =============================================================================
 
-// File: relay_top.cc
+// File: relay_tensor_store.cc
 
 #include <relay/relay_top.h>
-
 #include <ilang/util/log.h>
 
 namespace ilang {
 
-Ila GetRelayIla(const std::string& model_name) {
-  auto m = Ila(model_name);
+void DefineTensorStore(Ila& m) {
+  auto instr = m.NewInstr(F_TENSOR_STORE);
 
-  // TODO
-  // define top input
-  DefineTopInput(m);
+  auto func_run = (m.input(RELAY_FUNC_RUN_IN) == RELAY_FUNC_RUN_ON);
+  auto func_id_match = (m.input(RELAY_FUNC_ID_IN) == F_TENSOR_STORE_ID);
 
-  // define function input
-  DefineFuncInput(m);
+  instr.SetDecode(func_run & func_id_match);
 
-  // define architectural states
-  DefineArchState(m);
+  auto tensor = m.state(RELAY_TENSOR_MEM);
+  auto addr = m.input(DATA_IN_X);
+  auto data = m.input(RELAY_DATA_IN);
 
-  // define internal states
-  DefineInternalState(m);
+  instr.SetUpdate(tensor, Store(tensor, addr, data));
 
-  auto is_func_call = (m.input(RELAY_FUNC_RUN_IN) == RELAY_FUNC_RUN_ON);
-  auto is_valid_func = (m.input(RELAY_FUNC_ID_IN) > 0);
-  m.SetValid(is_func_call & is_valid_func);
-
-  // define Relay instructions
-
-  DefineVectorAdd(m);
-  DefineVectorMultiply(m);
-  DefineVectorSigmoid(m);
-  DefineVectorTanh(m);
-
-  DefineNNDense(m);
-
-  DefineLSTM(m);
-  
-  
-  DefineTensorStore(m);
-  DefineMaxpooling2D(m);
-
-
-  
-  return m;
 }
 
-}; // namespace ilang
+}
