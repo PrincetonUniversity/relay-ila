@@ -51,7 +51,6 @@ Ila GetRelayIla(const std::string& model_name) {
   m.SetValid(is_func_call & is_valid_func);
 
   // define Relay instructions
-
   auto vector_child = m.NewChild(RELAY_VECTOR_OP_CHILD);
   vector_child.SetValid(is_func_call & is_valid_func);
   DefineVectorAdd(m);
@@ -64,7 +63,6 @@ Ila GetRelayIla(const std::string& model_name) {
   DefineNNDense(m);
 
   DefineLSTM(m);
-  
   
   DefineTensorStore(m);
   DefineMaxpooling2D(m);
