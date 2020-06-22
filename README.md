@@ -11,34 +11,46 @@ The ILA model of TVM/Relay.
 # Requirements
 
 - TVM/Relay Python interface https://tvm.apache.org/docs/install/from_source.html
-- ILAng https://github.com/Bo-Yuan-Huang/ILAng/tree/ilator_opt
-    - `-DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=11 -DILANG_BUILD_TEST=OFF -DILANG_BUILD_SYNTH=OFF  -DILANG_INSTALL_DEV=ON`
+- ILAng https://github.com/Bo-Yuan-Huang/ILAng
+    - `-DILANG_INSTALL_DEV=ON`
 - SystemC https://www.accellera.org/downloads/standards/systemc
 - CMake
 - C++11 compiler
 
 # Build instructions
 
-    mkdir build
-    cd build/
-    cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=11 ..
-    make
-    mkdir sim_model
-    ./relay
-    cp ../app/sim_main.cc sim_model/app/main.cc
-    cp ../uninterpreted_func/uninterpreted_func.cc sim_model/extern/
-    cd sim_model
-    mkdir build
-    cd build
-    cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_STANDARD=11 ..
-    make
-    # optional
-    # ../../../script/lstm_test.py 64 lstm.bin
-    cp ../../../flex-sim/* .
-    mv flex-64x64-step1.bin lstm.bin
-    ./relay_sim
-    mv flex-64x64-step2.bin lstm.bin
-    ./relay_sim
+To build the Relay ILA:
+
+``` bash
+mkdir build
+cd build
+cmake ..
+make
+```
+
+To generate the SystemC simulation model, in `<project-root>/build`:
+
+``` bash
+./relay
+cp ../app/sim_main.cc sim_model/app/main.cc
+cp ../uninterpreted_func/uninterpreted_func.cc sim_model/extern/
+cd sim_model
+mkdir build
+cd build
+cmake ..
+make
+```
+
+To run sanity checking simulation, in `<project-root>/build/sim_model/build`:
+
+``` bash
+./<project-root>/script/lstm_test.py 64 lstm.bin
+cp <project-root>/flex-sim/* .
+mv flex-64x64-step1.bin lstm.bin
+./relay_sim
+mv flex-64x64-step2.bin lstm.bin
+./relay_sim
+```
     
 # Input/Output sizes
 
