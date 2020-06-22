@@ -22,45 +22,27 @@
 // SOFTWARE.
 // =============================================================================
 
-// File: relay_func_call.h
+// File: relay_tensor_store.cc
 
-#ifndef RELAY_FUNC_CALL_H__
-#define RELAY_FUNC_CALL_H__
-
-#include <relay/relay_top_config.h>
+#include <relay/relay_top.h>
+#include <ilang/util/log.h>
 
 namespace ilang {
 
-// define function ID here
-#define F_MAXPOOING_2D "func_maxpooling_2d"
-#define F_MAXPOOLING_2D_ID 1
-#define F_MAXPOOLING_2D_ID_BITWIDTH RELAY_FUNC_ID_IN_BITWIDTH
+void DefineTensorStore(Ila& m) {
+  auto instr = m.NewInstr(F_TENSOR_STORE);
 
-#define F_TENSOR_STORE "func_tensor_store"
-#define F_TENSOR_STORE_ID 2
-#define F_TENSOR_STORE_ID_BITWIDTH RELAY_FUNC_ID_IN_BITWIDTH
+  auto func_run = (m.input(RELAY_FUNC_RUN_IN) == RELAY_FUNC_RUN_ON);
+  auto func_id_match = (m.input(RELAY_FUNC_ID_IN) == F_TENSOR_STORE_ID);
 
+  instr.SetDecode(func_run & func_id_match);
 
-#define F_LSTM "func_lstm"
-#define F_LSTM_ID 3
+  auto tensor = m.state(RELAY_TENSOR_MEM);
+  auto addr = m.input(DATA_IN_X);
+  auto data = m.input(RELAY_DATA_IN);
 
-// #define F_VECTOR_ADD "func_vector_add"
-// #define F_VECTOR_ADD_ID 4
+  instr.SetUpdate(tensor, Store(tensor, addr, data));
 
-// #define F_VECTOR_MULTIPLY "func_vector_multiply"
-// #define F_VECTOR_MULTIPLY_ID 5
+}
 
-
-// #define F_VECTOR_SIGMOID "func_vector_sigmoid"
-// #define F_VECTOR_SIGMOID_ID 6
-
-// #define F_VECTOR_TANH "func_vector_tanh"
-// #define F_VECTOR_TANH_ID 7
-
-// #define F_NN_DENSE "func_nn_dense"
-// #define F_NN_DENSE_ID 8
-
-
-};
-
-#endif // RELAY_FUNCTION_CALL_H__
+}

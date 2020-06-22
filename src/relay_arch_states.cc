@@ -22,45 +22,20 @@
 // SOFTWARE.
 // =============================================================================
 
-// File: relay_func_call.h
+// File: relay_arch_states.cc
 
-#ifndef RELAY_FUNC_CALL_H__
-#define RELAY_FUNC_CALL_H__
+#include <relay/relay_top.h>
 
-#include <relay/relay_top_config.h>
+#include <ilang/util/log.h>
 
 namespace ilang {
 
-// define function ID here
-#define F_MAXPOOING_2D "func_maxpooling_2d"
-#define F_MAXPOOLING_2D_ID 1
-#define F_MAXPOOLING_2D_ID_BITWIDTH RELAY_FUNC_ID_IN_BITWIDTH
+void DefineArchState(Ila& m) {
+  // tensor memory 
+  m.NewMemState(RELAY_TENSOR_MEM, RELAY_FUNC_ADDR_IN_BITWIDTH, RELAY_FUNC_DATA_IN_BITWIDTH);
 
-#define F_TENSOR_STORE "func_tensor_store"
-#define F_TENSOR_STORE_ID 2
-#define F_TENSOR_STORE_ID_BITWIDTH RELAY_FUNC_ID_IN_BITWIDTH
+  // memory space used by lstm/vector_op/nn_dense
+  m.NewMemState(RELAY_MEMORY, RELAY_LSTM_ADDR_BW, RELAY_VECTOR_DATA_BW);
+}
 
-
-#define F_LSTM "func_lstm"
-#define F_LSTM_ID 3
-
-// #define F_VECTOR_ADD "func_vector_add"
-// #define F_VECTOR_ADD_ID 4
-
-// #define F_VECTOR_MULTIPLY "func_vector_multiply"
-// #define F_VECTOR_MULTIPLY_ID 5
-
-
-// #define F_VECTOR_SIGMOID "func_vector_sigmoid"
-// #define F_VECTOR_SIGMOID_ID 6
-
-// #define F_VECTOR_TANH "func_vector_tanh"
-// #define F_VECTOR_TANH_ID 7
-
-// #define F_NN_DENSE "func_nn_dense"
-// #define F_NN_DENSE_ID 8
-
-
-};
-
-#endif // RELAY_FUNCTION_CALL_H__
+} // namespace ilang

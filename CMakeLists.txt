@@ -44,7 +44,34 @@ set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 ##
 ## ilang
 ##
-find_package(ilang REQUIRED)
+find_package(ilang REQUIRED 1.0.5)
+
+# ---------------------------------------------------------------------------- #
+# TARGET
+# library
+# ---------------------------------------------------------------------------- #
+add_library(${MyTarget}ila
+  src/relay_arch_states.cc
+  src/relay_func_input.cc
+  src/relay_internal_states.cc
+  src/relay_lstm.cc
+  src/relay_maxpooling_2d.cc
+  src/relay_nn_dense.cc
+  src/relay_tensor_store.cc
+  src/relay_top.cc
+  src/relay_top_input.cc
+  src/relay_vector_op.cc
+)
+
+add_library(${PROJECT_NAME}::${MyTarget}ila ALIAS ${MyTarget}ila)
+
+target_include_directories(${MyTarget}ila
+  PUBLIC
+    $<INSTALL_INTERFACE:include>
+    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+)
+
+target_link_libraries(${MyTarget}ila ilang::ilang)
 
 # ---------------------------------------------------------------------------- #
 # TARGET
@@ -52,9 +79,6 @@ find_package(ilang REQUIRED)
 # ---------------------------------------------------------------------------- #
 add_executable(${MyTarget} 
   app/main.cc
-  src/relay_top.cc
 )
 
-target_include_directories(${MyTarget} PRIVATE include)
-
-target_link_libraries(${MyTarget} ilang::ilang)
+target_link_libraries(${MyTarget} PUBLIC ${MyTarget}ila)
