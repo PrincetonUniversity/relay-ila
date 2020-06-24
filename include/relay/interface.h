@@ -22,49 +22,19 @@
 // SOFTWARE.
 // =============================================================================
 
-// File: relay_top.h
+// File: interface.h
 
-#ifndef RELAY_TOP_H__
-#define RELAY_TOP_H__
+#ifndef RELAY_INTERFACE_H__
+#define RELAY_INTERFACE_H__
 
 #include <string>
 
 #include <ilang/ilang++.h>
 
-#include <relay/interface.h>
-#include <relay/relay_func_config.h>
-#include <relay/relay_top_config.h>
-
 namespace ilang {
 
-// define top input
-void DefineTopInput(Ila& m);
+Ila GetRelayIla(const std::string& model_name = "relay");
 
-// define function input
-void DefineFuncInput(Ila& m);
+} // namespace ilang
 
-// define architectural states
-void DefineArchState(Ila& m);
-
-// define internal states
-void DefineInternalState(Ila& m);
-
-// define Relay instructions
-void DefineTensorStore(Ila& m);
-void DefineMaxpooling2D(Ila& m);
-
-// define Relay operations
-
-void DefineVectorAdd(Ila& m);
-void DefineVectorMultiply(Ila& m);
-void DefineVectorSigmoid(Ila& m);
-void DefineVectorTanh(Ila& m);
-
-void DefineNNDense(Ila& m);
-
-// define LSTM instructions
-void DefineLSTM(Ila& m);
-
-}; // namespace ilang
-
-#endif // RELAY_TOP_H__
+#endif // RELAY_INTERFACE_H__
