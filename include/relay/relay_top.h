@@ -37,6 +37,8 @@
 
 namespace ilang {
 
+namespace relay {
+
 // define top input
 void DefineTopInput(Ila& m);
 
@@ -65,6 +67,8 @@ void DefineNNDense(Ila& m);
 // define LSTM instructions
 void DefineLSTM(Ila& m);
 
-}; // namespace ilang
+} // namespace relay
+
+} // namespace ilang
 
 #endif // RELAY_TOP_H__

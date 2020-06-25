@@ -24,10 +24,13 @@
 
 // File: relay_tensor_store.cc
 
-#include <relay/relay_top.h>
 #include <ilang/util/log.h>
 
+#include <relay/relay_top.h>
+
 namespace ilang {
+
+namespace relay {
 
 void DefineTensorStore(Ila& m) {
   auto instr = m.NewInstr(F_TENSOR_STORE);
@@ -42,7 +45,8 @@ void DefineTensorStore(Ila& m) {
   auto data = m.input(RELAY_DATA_IN);
 
   instr.SetUpdate(tensor, Store(tensor, addr, data));
-
 }
 
-}
+} // namespace relay
+
+} // namespace ilang

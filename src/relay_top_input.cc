@@ -24,11 +24,13 @@
 
 // File: relay_top_input.cc
 
-#include <relay/relay_top.h>
-
 #include <ilang/util/log.h>
 
+#include <relay/relay_top.h>
+
 namespace ilang {
+
+namespace relay {
 
 void DefineTopInput(Ila& m) {
   // define top function run input
@@ -38,5 +40,7 @@ void DefineTopInput(Ila& m) {
   // define top data input here
   m.NewBvInput(RELAY_DATA_IN, RELAY_DATA_IN_BITWIDTH);
 }
+
+} // namespace relay
 
 } // namespace ilang

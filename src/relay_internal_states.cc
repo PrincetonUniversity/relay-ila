@@ -26,10 +26,13 @@
 
 // this file include the internal states of the relay model.
 
-#include <relay/relay_top.h>
 #include <ilang/util/log.h>
 
+#include <relay/relay_top.h>
+
 namespace ilang {
+
+namespace relay {
 
 void DefineInternalState(Ila& m) {
   // internal states for relay maxpooling 2d function
@@ -37,11 +40,13 @@ void DefineInternalState(Ila& m) {
   // flag states for loop instructions
   m.NewBvState(MAXPOOLING_START_FLAG, MAXPOOLING_START_FLAG_BITWIDTH);
 
-  // m.NewBvState(MAXPOOLING_X_END_LOOP_FLAG, MAXPOOLING_X_END_LOOP_FLAG_BITWIDTH);
-  // m.NewBvState(MAXPOOLING_Y_END_LOOP_FLAG, MAXPOOLING_Y_END_LOOP_FLAG_BITWIDTH);
-  // m.NewBvState(MAXPOOLING_FIND_MAX_FLAG, MAXPOOLING_FIND_MAX_FLAG_BITWIDTH);
-  // m.NewBvState(MAXPOOLING_MAX_FOUND_FLAG, MAXPOOLING_MAX_FOUND_FLAG_BITWIDTH);
-  // m.NewBvState(MAXPOOLING_VAR_UPDATE_FLAG, MAXPOOLING_VAR_UPDATE_FLAG_BITWIDTH);
+#if 0
+  m.NewBvState(MAXPOOLING_X_END_LOOP_FLAG, MAXPOOLING_X_END_LOOP_FLAG_BITWIDTH);
+  m.NewBvState(MAXPOOLING_Y_END_LOOP_FLAG, MAXPOOLING_Y_END_LOOP_FLAG_BITWIDTH);
+  m.NewBvState(MAXPOOLING_FIND_MAX_FLAG, MAXPOOLING_FIND_MAX_FLAG_BITWIDTH);
+  m.NewBvState(MAXPOOLING_MAX_FOUND_FLAG, MAXPOOLING_MAX_FOUND_FLAG_BITWIDTH);
+  m.NewBvState(MAXPOOLING_VAR_UPDATE_FLAG, MAXPOOLING_VAR_UPDATE_FLAG_BITWIDTH);
+#endif
 
   // maxpooling state machine
   m.NewBvState(MAXPOOLING_STATE, MAXPOOLING_STATE_BITWIDTH);
@@ -78,7 +83,6 @@ void DefineInternalState(Ila& m) {
   m.NewBvState(RELAY_VECTOR_TANH_ENABLE, RELAY_FLAG_BW);
   m.NewBvState(RELAY_VECTOR_TANH_START, RELAY_FLAG_BW);
 
-  
   /**** RELAY nn dense states ****/
   m.NewBvState(RELAY_NN_DENSE_ENABLE, RELAY_FLAG_BW);
   m.NewBvState(RELAY_NN_DENSE_STATE, RELAY_NN_DENSE_STATE_BW);
@@ -96,7 +100,8 @@ void DefineInternalState(Ila& m) {
   m.NewBvState(RELAY_NN_OUTPUT_ADDR, RELAY_NN_ADDR_BW);
 
   m.NewBvState(RELAY_NN_DENSE_LOOP_CNTR, RELAY_NN_SIZE_BW);
-
 }
 
-}; // namespace ilang
+} // namespace relay
+
+} // namespace ilang

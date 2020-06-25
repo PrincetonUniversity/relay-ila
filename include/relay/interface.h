@@ -33,7 +33,11 @@
 
 namespace ilang {
 
+namespace relay {
+
 Ila GetRelayIla(const std::string& model_name = "relay");
+
+} // namespace relay
 
 } // namespace ilang
 

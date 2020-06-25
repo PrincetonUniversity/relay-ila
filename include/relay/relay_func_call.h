@@ -31,6 +31,8 @@
 
 namespace ilang {
 
+namespace relay {
+
 // define function ID here
 #define F_MAXPOOING_2D "func_maxpooling_2d"
 #define F_MAXPOOLING_2D_ID 1
@@ -39,7 +41,6 @@ namespace ilang {
 #define F_TENSOR_STORE "func_tensor_store"
 #define F_TENSOR_STORE_ID 2
 #define F_TENSOR_STORE_ID_BITWIDTH RELAY_FUNC_ID_IN_BITWIDTH
-
 
 #define F_LSTM "func_lstm"
 #define F_LSTM_ID 3
@@ -50,7 +51,6 @@ namespace ilang {
 // #define F_VECTOR_MULTIPLY "func_vector_multiply"
 // #define F_VECTOR_MULTIPLY_ID 5
 
-
 // #define F_VECTOR_SIGMOID "func_vector_sigmoid"
 // #define F_VECTOR_SIGMOID_ID 6
 
@@ -60,7 +60,8 @@ namespace ilang {
 // #define F_NN_DENSE "func_nn_dense"
 // #define F_NN_DENSE_ID 8
 
+} // namespace relay
 
-};
+} // namespace ilang
 
 #endif // RELAY_FUNCTION_CALL_H__

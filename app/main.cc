@@ -24,8 +24,6 @@
 
 // File: main.cc
 
-#include <relay/relay_top.h>
-
 #include <fstream>
 #include <iostream>
 
@@ -33,11 +31,13 @@
 #include <ilang/target-sc/ila_sim.h>
 #include <ilang/util/log.h>
 
+#include <relay/relay_top.h>
+
 using namespace ilang;
 
 int main() {
   // get the ILA model
-  auto relay = GetRelayIla("relay_sim");
+  auto relay = relay::GetRelayIla("relay_sim");
 
   ILA_INFO << "Model: " << relay;
   ILA_INFO << "#instr: " << relay.instr_num();
@@ -51,13 +51,11 @@ int main() {
     ILA_INFO << "#state: " << relay.child(i).state_num();
   }
 
-  auto model = relay.get();
-
   // simulation generation
   IlaSim simulator_generator;
   std::string sim_gen_dir = "./sim_model";
 
-  simulator_generator.set_instr_lvl_abs(model);
+  simulator_generator.set_instr_lvl_abs(relay.get());
   simulator_generator.enable_cmake_support();
   simulator_generator.sim_gen(sim_gen_dir, false, true, false);
 

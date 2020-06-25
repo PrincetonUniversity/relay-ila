@@ -29,6 +29,8 @@
 
 namespace ilang {
 
+namespace relay {
+
 // define top level input bitwidth
 #define RELAY_FUNC_ADDR_IN_BITWIDTH 32
 #define RELAY_FUNC_ARG_IN_BITWIDTH 8
@@ -52,6 +54,8 @@ namespace ilang {
 // define the tensor memory here
 #define RELAY_TENSOR_MEM "relay_tensor_mem"
 
-}
+} // namespace relay
+
+} // namespace ilang
 
 #endif // RELAY_TOP_CONFIG_H__

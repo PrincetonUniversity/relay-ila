@@ -30,6 +30,8 @@
 
 namespace ilang {
 
+namespace relay {
+
 Ila GetRelayIla(const std::string& model_name) {
   auto m = Ila(model_name);
 
@@ -63,13 +65,13 @@ Ila GetRelayIla(const std::string& model_name) {
   DefineNNDense(m);
 
   DefineLSTM(m);
-  
+
   DefineTensorStore(m);
   DefineMaxpooling2D(m);
 
-
-  
   return m;
 }
 
-}; // namespace ilang
+} // namespace relay
+
+} // namespace ilang

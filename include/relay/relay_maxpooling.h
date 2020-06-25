@@ -29,6 +29,8 @@
 
 namespace ilang {
 
+namespace relay {
+
 // set maxpooling function arguments as ILA input for now
 // define function input names
 
@@ -44,7 +46,6 @@ namespace ilang {
 
 #define DATA_IN_X "data_in_x"
 #define DATA_IN_X_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
-
 
 // define input pool_size(y, x)
 #define POOL_SIZE_Y_IN "pool_size_y"
@@ -67,7 +68,7 @@ namespace ilang {
 #define PADDING_IN_X "padding_in_x"
 #define PADDING_IN_X_BITWIDTH RELAY_FUNC_ARG_IN_BITWIDTH
 
-// define input layout 
+// define input layout
 #define LAYOUT_IN "layout_in"
 #define LAYOUT_IN_BITWIDTH RELAY_FUNC_ARG_IN_BITWIDTH
 
@@ -111,13 +112,12 @@ namespace ilang {
 #define MAXPOOLING_STATE_VAR_UPDATE 5
 #define MAXPOOLING_STATE_DONE 6
 
-
 // counter
 #define MAXPOOLING_X_LOOP_CNTR "maxpooling_X_loop_cntr"
-#define MAXPOOLING_X_LOOP_CNTR_BITWIDTH  RELAY_FUNC_ADDR_IN_BITWIDTH
+#define MAXPOOLING_X_LOOP_CNTR_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
 
 #define MAXPOOLING_Y_LOOP_CNTR "maxpooling_Y_loop_cntr"
-#define MAXPOOLING_Y_LOOP_CNTR_BITWIDTH  RELAY_FUNC_ADDR_IN_BITWIDTH
+#define MAXPOOLING_Y_LOOP_CNTR_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
 
 #define MAXPOOLING_DATA_OUT_HEIGHT "maxpooling_data_out_height"
 #define MAXPOOLING_DATA_OUT_HEIGHT_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
@@ -128,7 +128,7 @@ namespace ilang {
 // child states for find max
 // find_max_cntr bitwidth should be twice larger than arg width
 #define MAXPOOLING_FIND_MAX_CNTR "maxpooling_find_max_cntr"
-#define MAXPOOLING_FIND_MAX_CNTR_BITWIDTH 2*RELAY_FUNC_ARG_IN_BITWIDTH
+#define MAXPOOLING_FIND_MAX_CNTR_BITWIDTH 2 * RELAY_FUNC_ARG_IN_BITWIDTH
 
 #define MAXPOOLING_FIND_MAX_RESULT "maxpooling_find_max_result"
 #define MAXPOOLING_FIND_MAX_RESULT_BITWIDTH RELAY_FUNC_DATA_IN_BITWIDTH
@@ -136,8 +136,8 @@ namespace ilang {
 #define MAXPOOLING_FIND_MAX_CHILD_FLAG "maxpooling_find_max_child_flag"
 #define MAXPOOLING_FIND_MAX_CHILD_FLAG_BITWIDTH FLAG_BITWIDTH
 
+} // namespace relay
 
-}
-
+} // namespace ilang
 
 #endif // RELAY_MAXPOOLING_H__

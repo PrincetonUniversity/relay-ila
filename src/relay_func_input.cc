@@ -24,11 +24,13 @@
 
 // File: relay_func_input.cc
 
-#include <relay/relay_top.h>
-
 #include <ilang/util/log.h>
 
+#include <relay/relay_top.h>
+
 namespace ilang {
+
+namespace relay {
 
 void DefineFuncInput(Ila& m) {
 
@@ -45,14 +47,13 @@ void DefineFuncInput(Ila& m) {
   // input of strides
   m.NewBvInput(STRIDES_Y_IN, STRIDES_Y_IN_BITWIDTH);
   m.NewBvInput(STRIDES_X_IN, STRIDES_X_IN_BITWIDTH);
-  // input of padding 
+  // input of padding
   m.NewBvInput(PADDING_IN_Y, PADDING_IN_Y_BITWIDTH);
   m.NewBvInput(PADDING_IN_X, PADDING_IN_X_BITWIDTH);
   // input of layout
   m.NewBvInput(LAYOUT_IN, LAYOUT_IN_BITWIDTH);
   // input of ceiling mode
   m.NewBvInput(CEIL_MODE_IN, CEIL_MODE_IN_BITWIDTH);
-
 
   /**** Relay LSTM input ****/
   m.NewBvInput(RELAY_LSTM_IN_SIZE, RELAY_VECTOR_SIZE_BW);
@@ -73,8 +74,8 @@ void DefineFuncInput(Ila& m) {
   m.NewBvInput(RELAY_LSTM_TEMP_VECTOR0_ADDR, RELAY_LSTM_ADDR_BW);
   m.NewBvInput(RELAY_LSTM_TEMP_VECTOR1_ADDR, RELAY_LSTM_ADDR_BW);
   m.NewBvInput(RELAY_LSTM_TEMP_VECTOR2_ADDR, RELAY_LSTM_ADDR_BW);
-
-  
 }
 
-}; // namespace ilang
+} // namespace relay
+
+} // namespace ilang

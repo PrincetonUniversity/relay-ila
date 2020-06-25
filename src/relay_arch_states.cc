@@ -24,18 +24,23 @@
 
 // File: relay_arch_states.cc
 
-#include <relay/relay_top.h>
-
 #include <ilang/util/log.h>
+
+#include <relay/relay_top.h>
 
 namespace ilang {
 
+namespace relay {
+
 void DefineArchState(Ila& m) {
-  // tensor memory 
-  m.NewMemState(RELAY_TENSOR_MEM, RELAY_FUNC_ADDR_IN_BITWIDTH, RELAY_FUNC_DATA_IN_BITWIDTH);
+  // tensor memory
+  m.NewMemState(RELAY_TENSOR_MEM, RELAY_FUNC_ADDR_IN_BITWIDTH,
+                RELAY_FUNC_DATA_IN_BITWIDTH);
 
   // memory space used by lstm/vector_op/nn_dense
   m.NewMemState(RELAY_MEMORY, RELAY_LSTM_ADDR_BW, RELAY_VECTOR_DATA_BW);
 }
+
+} // namespace relay
 
 } // namespace ilang

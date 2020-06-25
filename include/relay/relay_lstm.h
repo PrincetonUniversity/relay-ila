@@ -1,7 +1,35 @@
+// =============================================================================
+// MIT License
+//
+// Copyright (c) 2020 Princeton University
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+// =============================================================================
+
+// File: relay_lstm.h
+
 #ifndef RELAY_LSTM_H__
 #define RELAY_LSTM_H__
-namespace ilang 
-{
+
+namespace ilang {
+
+namespace relay {
 
 #define RELAY_LSTM_ADDR_BW 32
 
@@ -21,7 +49,7 @@ namespace ilang
 #define RELAY_LSTM_OUTPUT_STATE 11
 #define RELAY_LSTM_END_STATE 12
 
-#define RELAY_LSTM_MATRIX_VECTOR "relay_lstm_matrix_vector_module" 
+#define RELAY_LSTM_MATRIX_VECTOR "relay_lstm_matrix_vector_module"
 #define RELAY_LSTM_DENSE_I2H_INSTR "relay_lstm_dense_i2h_instr"
 #define RELAY_LSTM_DENSE_H2H_INSTR "relay_lstm_dense_h2h_instr"
 #define RELAY_LSTM_ADD_DENSE_INSTR "relay_lstm_add_dense_instr"
@@ -34,13 +62,11 @@ namespace ilang
 #define RELAY_LSTM_NEXT_CELL_TANH_INSTR "relay_lstm_next_cell_tanh_instr"
 #define RELAY_LSTM_OUTPUT_INSTR "relay_lstm_output_instr"
 
-
 #define RELAY_LSTM_FLAG_BW 1
 #define RELAY_LSTM_FLAG_ON 1
 #define RELAY_LSTM_FLAG_OFF 0
 
 #define RELAY_LSTM_RETURN_STATE "relay_lstm_return_state"
-
 
 // inputs
 
@@ -66,6 +92,8 @@ namespace ilang
 #define RELAY_LSTM_START "relay_lstm_start"
 #define RELAY_LSTM_STATE "relay_lstm_state"
 
+} // namespace relay
 
-}
-#endif
+} // namespace ilang
+
+#endif // RELAY_LSTM_H__
