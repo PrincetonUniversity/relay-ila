@@ -1,5 +1,5 @@
 #include "systemc.h"
-#include "relay_sim.h"
+#include "relay.h"
 #include <iostream>
 #include <math.h>
 
@@ -8,7 +8,7 @@
 #define DATA_BYTES 4
 
 /** floating point operations **/
-sc_biguint<DATA_BW> relay_sim::bv_tanh(sc_biguint<DATA_BW> op0)
+sc_biguint<DATA_BW> relay::bv_tanh(sc_biguint<DATA_BW> op0)
 {
   unsigned int i = op0.to_uint();
   float f = (*(float*)&i);
@@ -18,7 +18,7 @@ sc_biguint<DATA_BW> relay_sim::bv_tanh(sc_biguint<DATA_BW> op0)
   return ires;
 }
 
-sc_biguint<DATA_BW> relay_sim::bv_sigmoid(sc_biguint<DATA_BW> op0)
+sc_biguint<DATA_BW> relay::bv_sigmoid(sc_biguint<DATA_BW> op0)
 {
   unsigned int i = op0.to_uint();
   float f = (*(float*)&i);
@@ -28,7 +28,7 @@ sc_biguint<DATA_BW> relay_sim::bv_sigmoid(sc_biguint<DATA_BW> op0)
   return ires;
 }
 
-sc_biguint<DATA_BW> relay_sim::bv_add(sc_biguint<DATA_BW> op0, sc_biguint<DATA_BW> op1)
+sc_biguint<DATA_BW> relay::bv_add(sc_biguint<DATA_BW> op0, sc_biguint<DATA_BW> op1)
 {
   unsigned int i0 = op0.to_uint(), i1 = op1.to_uint();
   float f0 = (*(float*)&i0), f1 = (*(float*)&i1);
@@ -39,7 +39,7 @@ sc_biguint<DATA_BW> relay_sim::bv_add(sc_biguint<DATA_BW> op0, sc_biguint<DATA_B
   return ires;
 }
 
-sc_biguint<DATA_BW> relay_sim::bv_multiply(sc_biguint<DATA_BW> op0, sc_biguint<DATA_BW> op1)
+sc_biguint<DATA_BW> relay::bv_multiply(sc_biguint<DATA_BW> op0, sc_biguint<DATA_BW> op1)
 {
   unsigned int i0 = op0.to_uint(), i1 = op1.to_uint();
   float f0 = (*(float*)&i0), f1 = (*(float*)&i1);
@@ -50,7 +50,7 @@ sc_biguint<DATA_BW> relay_sim::bv_multiply(sc_biguint<DATA_BW> op0, sc_biguint<D
   return ires;
 }
 
-sc_biguint<8> relay_sim::relay_adpfloat_max(sc_biguint<8> arg_0, sc_biguint<8> arg_1) {
+sc_biguint<8> relay::relay_adpfloat_max(sc_biguint<8> arg_0, sc_biguint<8> arg_1) {
 
   sc_biguint<8> result = 0;
 
