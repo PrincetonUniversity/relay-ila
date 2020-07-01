@@ -41,7 +41,7 @@ void DefineTensorStore(Ila& m) {
   instr.SetDecode(func_run & func_id_match);
 
   auto tensor = m.state(RELAY_TENSOR_MEM);
-  auto addr = m.input(DATA_IN_X);
+  auto addr = m.input(DATA_IN_Y);
   auto data = m.input(RELAY_DATA_IN);
 
   instr.SetUpdate(tensor, Store(tensor, addr, data));
