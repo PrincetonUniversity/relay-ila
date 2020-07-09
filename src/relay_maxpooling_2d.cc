@@ -31,6 +31,7 @@
 #include <ilang/util/log.h>
 
 #include <relay/relay_top.h>
+#include <relay/uninterpreted_func.h>
 
 namespace ilang {
 
@@ -38,12 +39,6 @@ namespace relay {
 
 void AddChild_Loop_Op(Ila& m);
 void AddChild_Find_Max(Ila& m);
-
-auto uf_out = SortRef::BV(RELAY_FUNC_DATA_IN_BITWIDTH);
-auto uf_in1 = SortRef::BV(RELAY_FUNC_DATA_IN_BITWIDTH);
-auto uf_in2 = SortRef::BV(RELAY_FUNC_DATA_IN_BITWIDTH);
-FuncRef signed_gt("signed_gt", uf_out, uf_in1, uf_in2);
-FuncRef adpfloat_max("relay_adpfloat_max", uf_out, uf_in1, uf_in2);
 
 void DefineMaxpooling2D(Ila& m) {
 
