@@ -35,12 +35,10 @@ namespace ilang {
 
 namespace relay {
 
-auto uf_out = SortRef::BV(RELAY_FUNC_DATA_IN_BITWIDTH);
-auto uf_in1 = SortRef::BV(RELAY_FUNC_DATA_IN_BITWIDTH);
-auto uf_in2 = SortRef::BV(RELAY_FUNC_DATA_IN_BITWIDTH);
+#define UF_ARG SortRef::BV(RELAY_FUNC_DATA_IN_BITWIDTH)
 
-static FuncRef signed_gt("signed_gt", uf_out, uf_in1, uf_in2);
-static FuncRef adpfloat_max("relay_adpfloat_max", uf_out, uf_in1, uf_in2);
+static FuncRef signed_gt("signed_gt", UF_ARG, UF_ARG, UF_ARG);
+static FuncRef adpfloat_max("relay_adpfloat_max", UF_ARG, UF_ARG, UF_ARG);
 
 } // namespace relay
 
