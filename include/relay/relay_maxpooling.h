@@ -112,7 +112,20 @@ namespace relay {
 #define MAXPOOLING_STATE_VAR_UPDATE 5
 #define MAXPOOLING_STATE_DONE 6
 
-// counter
+// copies of inputs
+#define MAXPOOLING_POOL_X "maxpooling_pool_X"
+#define MAXPOOLING_POOL_X_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
+
+#define MAXPOOLING_POOL_Y "maxpooling_pool_y"
+#define MAXPOOLING_POOL_Y_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
+
+#define MAXPOOLING_STRIDE_X "maxpooling_stride_X"
+#define MAXPOOLING_STRIDE_X_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
+
+#define MAXPOOLING_STRIDE_Y "maxpooling_stride_y"
+#define MAXPOOLING_STRIDE_Y_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
+
+// counters
 #define MAXPOOLING_X_LOOP_CNTR "maxpooling_X_loop_cntr"
 #define MAXPOOLING_X_LOOP_CNTR_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
 
@@ -127,8 +140,9 @@ namespace relay {
 
 // child states for find max
 // find_max_cntr bitwidth should be twice larger than arg width
-#define MAXPOOLING_FIND_MAX_CNTR "maxpooling_find_max_cntr"
-#define MAXPOOLING_FIND_MAX_CNTR_BITWIDTH 2 * RELAY_FUNC_ARG_IN_BITWIDTH
+#define MAXPOOLING_FIND_MAX_CNTR_X "maxpooling_find_max_cntr_x"
+#define MAXPOOLING_FIND_MAX_CNTR_Y "maxpooling_find_max_cntr_y"
+#define MAXPOOLING_FIND_MAX_CNTR_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
 
 #define MAXPOOLING_FIND_MAX_RESULT "maxpooling_find_max_result"
 #define MAXPOOLING_FIND_MAX_RESULT_BITWIDTH RELAY_FUNC_DATA_IN_BITWIDTH

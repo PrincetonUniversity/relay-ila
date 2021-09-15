@@ -42,29 +42,21 @@ void AddChild_Find_Max(Ila& m);
 
 void DefineMaxpooling2D(Ila& m) {
 
-  {
-    auto instr = m.NewInstr(F_MAXPOOING_2D);
-
-    auto func_id_match = (m.input(RELAY_FUNC_ID_IN) == F_MAXPOOLING_2D_ID);
-    auto func_run = (m.input(RELAY_FUNC_RUN_IN) == RELAY_FUNC_RUN_ON);
-
-    instr.SetDecode(func_id_match & func_run);
-
     // function arguments
     auto height_in = m.input(DATA_IN_Y); // 32
     auto width_in = m.input(DATA_IN_X);
 
-    auto pool_y = m.input(POOL_SIZE_Y_IN);
-    auto pool_x = m.input(POOL_SIZE_X_IN);
+    auto pool_y_in = m.input(POOL_SIZE_Y_IN); // 8
+    auto pool_x_in = m.input(POOL_SIZE_X_IN);
 
-    auto stride_y = m.input(STRIDES_Y_IN); // 8
-    auto stride_x = m.input(STRIDES_X_IN);
+    auto stride_y_in = m.input(STRIDES_Y_IN); // 8
+    auto stride_x_in = m.input(STRIDES_X_IN);
 
-    auto stride_y_32 = Concat(BvConst(0, 24), stride_y);
-    auto stride_x_32 = Concat(BvConst(0, 24), stride_x);
-    // calculate the output tensor size
-    auto height_out_tmp = height_in / stride_y_32;
-    auto width_out_tmp = width_in / stride_x_32;
+    auto pool_y = m.input(MAXPOOLING_POOL_X); // 32
+    auto pool_x = m.input(MAXPOOLING_POOL_Y);
+
+    auto stride_y = m.input(MAXPOOLING_STRIDE_X); // 32
+    auto stride_x = m.input(MAXPOOLING_STRIDE_Y);
 
     // states used for child
     auto flag_start = m.state(MAXPOOLING_START_FLAG); // ON/OFF
@@ -78,6 +70,20 @@ void DefineMaxpooling2D(Ila& m) {
     auto height_out = m.state(MAXPOOLING_DATA_OUT_HEIGHT);
     auto width_out = m.state(MAXPOOLING_DATA_OUT_WIDTH);
 
+  {
+    auto instr = m.NewInstr(F_MAXPOOING_2D);
+
+    auto func_id_match = (m.input(RELAY_FUNC_ID_IN) == F_MAXPOOLING_2D_ID);
+    auto func_run = (m.input(RELAY_FUNC_RUN_IN) == RELAY_FUNC_RUN_ON);
+
+    instr.SetDecode(func_id_match & func_run);
+
+    auto stride_y_32 = ZExt(stride_y, 32);
+    auto stride_x_32 = ZExt(stride_x, 32);
+    // calculate the output tensor size
+    auto height_out_tmp = height_in / stride_y_32;
+    auto width_out_tmp = width_in / stride_x_32;
+
     // states update for child
     instr.SetUpdate(flag_start,
                     BvConst(FLAG_ON, MAXPOOLING_START_FLAG_BITWIDTH));
@@ -90,6 +96,12 @@ void DefineMaxpooling2D(Ila& m) {
 
     instr.SetUpdate(height_out, height_out_tmp);
     instr.SetUpdate(width_out, width_out_tmp);
+
+    instr.SetUpdate(pool_x, ZExt(pool_x_in, RELAY_FUNC_ADDR_IN_BITWIDTH));
+    instr.SetUpdate(pool_y, ZExt(pool_y_in, RELAY_FUNC_ADDR_IN_BITWIDTH));
+
+    instr.SetUpdate(stride_x, stride_x_32);
+    instr.SetUpdate(stride_y, stride_y_32);
 
     // add child to do the loop
     AddChild_Loop_Op(m);
@@ -113,18 +125,20 @@ void AddChild_Loop_Op(Ila& m) {
   auto height_out = m.state(MAXPOOLING_DATA_OUT_HEIGHT);
   auto width_out = m.state(MAXPOOLING_DATA_OUT_WIDTH);
 
-  auto pool_y = m.input(POOL_SIZE_Y_IN);
-  auto pool_x = m.input(POOL_SIZE_X_IN);
+  auto pool_y = m.state(MAXPOOLING_POOL_Y);
+  auto pool_x = m.state(MAXPOOLING_POOL_X);
 
-  auto stride_y = m.input(STRIDES_Y_IN); // 8
-  auto stride_x = m.input(STRIDES_X_IN);
+  auto stride_y = m.state(MAXPOOLING_STRIDE_Y);
+  auto stride_x = m.state(MAXPOOLING_STRIDE_X);
 
   // tensor memory state
   auto tensor = m.state(RELAY_TENSOR_MEM);
 
   // child states for find max
-  auto cntr_find_max = child.NewBvState(MAXPOOLING_FIND_MAX_CNTR,
-                                        MAXPOOLING_FIND_MAX_CNTR_BITWIDTH);
+  auto cntr_max_X = child.NewBvState(MAXPOOLING_FIND_MAX_CNTR_X,
+                                     MAXPOOLING_FIND_MAX_CNTR_BITWIDTH);
+  auto cntr_max_Y = child.NewBvState(MAXPOOLING_FIND_MAX_CNTR_Y,
+                                     MAXPOOLING_FIND_MAX_CNTR_BITWIDTH);
   auto result_max = child.NewBvState(MAXPOOLING_FIND_MAX_RESULT,
                                      MAXPOOLING_FIND_MAX_RESULT_BITWIDTH);
 
@@ -182,7 +196,9 @@ void AddChild_Loop_Op(Ila& m) {
     auto next_state =
         BvConst(MAXPOOLING_STATE_FIND_MAX_CHILD, MAXPOOLING_STATE_BITWIDTH);
 
-    instr.SetUpdate(cntr_find_max,
+    instr.SetUpdate(cntr_max_X,
+                    BvConst(0, MAXPOOLING_FIND_MAX_CNTR_BITWIDTH));
+    instr.SetUpdate(cntr_max_Y,
                     BvConst(0, MAXPOOLING_FIND_MAX_CNTR_BITWIDTH));
     instr.SetUpdate(state, next_state);
 
@@ -233,19 +249,18 @@ void AddChild_Find_Max(Ila& m) {
   auto height_in = m.input(DATA_IN_Y); // 32
   auto width_in = m.input(DATA_IN_X);
 
-  auto pool_y = m.input(POOL_SIZE_Y_IN);
-  auto pool_x = m.input(POOL_SIZE_X_IN); // 8
+  auto pool_y = m.state(MAXPOOLING_POOL_Y);
+  auto pool_x = m.state(MAXPOOLING_POOL_X);
 
-  auto stride_y = m.input(STRIDES_Y_IN); // 8
-  auto stride_x = m.input(STRIDES_X_IN);
+  auto stride_y = m.state(MAXPOOLING_STRIDE_Y);
+  auto stride_x = m.state(MAXPOOLING_STRIDE_X);
 
   auto out_y = m.state(MAXPOOLING_Y_LOOP_CNTR);
   auto out_x = m.state(MAXPOOLING_X_LOOP_CNTR); // 32
 
-  auto pool_y_16 = Concat(BvConst(0, POOL_SIZE_Y_IN_BITWIDTH), pool_y);
-  auto pool_x_16 = Concat(BvConst(0, POOL_SIZE_X_IN_BITWIDTH), pool_x);
+  auto cntr_max_y = child_loop.state(MAXPOOLING_FIND_MAX_CNTR_Y);
+  auto cntr_max_x = child_loop.state(MAXPOOLING_FIND_MAX_CNTR_X);
 
-  auto cntr_find_max = child_loop.state(MAXPOOLING_FIND_MAX_CNTR);
   auto result = child_loop.state(MAXPOOLING_FIND_MAX_RESULT);
 
   // tensor memory state
@@ -254,27 +269,21 @@ void AddChild_Find_Max(Ila& m) {
   // instruction finding the max value in the pooling window
   {
     auto instr = child_find_max.NewInstr("maxpooling_find_max_op");
-    auto window_size = pool_y_16 * pool_x_16;
 
-    auto cntr_cond = (cntr_find_max < window_size);
+    auto cntr_cond = (cntr_max_y < pool_y) | (cntr_max_x < pool_x);
     auto state_cond = (state == MAXPOOLING_STATE_FIND_MAX_CHILD);
 
     instr.SetDecode(cntr_cond & state_cond);
 
     // base coordinates of the pooling window
-    auto win_x_base = out_x * Concat(BvConst(0, 24), stride_x);
-    auto win_y_base = out_y * Concat(BvConst(0, 24), stride_y);
+    auto win_x_base = out_x * stride_x;
+    auto win_y_base = out_y * stride_y;
 
     // coordinates within the pooling window
-    auto win_x_offset = URem(cntr_find_max, pool_x_16);
-    auto win_y_offset = cntr_find_max / pool_x_16;
-
-    auto win_x_offset_32 = Concat(BvConst(0, 16), win_x_offset);
-    auto win_y_offset_32 = Concat(BvConst(0, 16), win_y_offset);
 
     // coordinates in the 2D tensor
-    auto tensor_x = win_x_base + win_x_offset_32;
-    auto tensor_y = win_y_base + win_y_offset_32;
+    auto tensor_x = win_x_base + cntr_max_x;
+    auto tensor_y = win_y_base + cntr_max_y;
 
     // calculate the memory address according to the tensor coordinates
     auto addr = tensor_y * width_in + tensor_x;
@@ -286,15 +295,23 @@ void AddChild_Find_Max(Ila& m) {
     //                       Ite(data > result, data, result));
 
     // use uninterpreted function
-    auto result_tmp = Ite(cntr_find_max == 0, data, adpfloat_max(result, data));
+    auto result_tmp = Ite(
+      (cntr_max_x == 0) & (cntr_max_y == 0), data, adpfloat_max(result, data)
+    );
 
     // state updates
-    auto find_finish = (cntr_find_max == (window_size - 1));
+    
+    auto x_done = cntr_max_x == pool_x - 1;
+    auto y_done = cntr_max_y == pool_y - 1;
+
     auto next_state = Ite(
-        find_finish, BvConst(MAXPOOLING_STATE_WRITE, MAXPOOLING_STATE_BITWIDTH),
+        y_done & x_done, BvConst(MAXPOOLING_STATE_WRITE, MAXPOOLING_STATE_BITWIDTH),
         BvConst(MAXPOOLING_STATE_FIND_MAX_CHILD, MAXPOOLING_STATE_BITWIDTH));
 
-    instr.SetUpdate(cntr_find_max, cntr_find_max + 1);
+    auto zero = BvConst(0, RELAY_FUNC_ADDR_IN_BITWIDTH);
+    instr.SetUpdate(cntr_max_x, Ite(x_done, zero, cntr_max_x + 1));
+    instr.SetUpdate(cntr_max_y, Ite(x_done, cntr_max_y + 1, cntr_max_y));
+
     instr.SetUpdate(result, result_tmp);
     instr.SetUpdate(state, next_state);
   }
