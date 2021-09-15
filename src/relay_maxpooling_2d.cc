@@ -52,11 +52,11 @@ void DefineMaxpooling2D(Ila& m) {
   auto stride_y_in = m.input(STRIDES_Y_IN); // 8
   auto stride_x_in = m.input(STRIDES_X_IN);
 
-  auto pool_y = m.state(MAXPOOLING_POOL_X); // 32
-  auto pool_x = m.state(MAXPOOLING_POOL_Y);
+  auto pool_y = m.state(MAXPOOLING_POOL_Y); // 32
+  auto pool_x = m.state(MAXPOOLING_POOL_X);
 
-  auto stride_y = m.state(MAXPOOLING_STRIDE_X); // 32
-  auto stride_x = m.state(MAXPOOLING_STRIDE_Y);
+  auto stride_y = m.state(MAXPOOLING_STRIDE_Y); // 32
+  auto stride_x = m.state(MAXPOOLING_STRIDE_X);
 
   // states used for child
   auto flag_start = m.state(MAXPOOLING_START_FLAG); // ON/OFF

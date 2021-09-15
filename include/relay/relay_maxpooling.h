@@ -113,23 +113,23 @@ namespace relay {
 #define MAXPOOLING_STATE_DONE 6
 
 // copies of inputs
-#define MAXPOOLING_POOL_X "maxpooling_pool_X"
+#define MAXPOOLING_POOL_X "maxpooling_pool_x"
 #define MAXPOOLING_POOL_X_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
 
 #define MAXPOOLING_POOL_Y "maxpooling_pool_y"
 #define MAXPOOLING_POOL_Y_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
 
-#define MAXPOOLING_STRIDE_X "maxpooling_stride_X"
+#define MAXPOOLING_STRIDE_X "maxpooling_stride_x"
 #define MAXPOOLING_STRIDE_X_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
 
 #define MAXPOOLING_STRIDE_Y "maxpooling_stride_y"
 #define MAXPOOLING_STRIDE_Y_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
 
 // counters
-#define MAXPOOLING_X_LOOP_CNTR "maxpooling_X_loop_cntr"
+#define MAXPOOLING_X_LOOP_CNTR "maxpooling_x_loop_cntr"
 #define MAXPOOLING_X_LOOP_CNTR_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
 
-#define MAXPOOLING_Y_LOOP_CNTR "maxpooling_Y_loop_cntr"
+#define MAXPOOLING_Y_LOOP_CNTR "maxpooling_y_loop_cntr"
 #define MAXPOOLING_Y_LOOP_CNTR_BITWIDTH RELAY_FUNC_ADDR_IN_BITWIDTH
 
 #define MAXPOOLING_DATA_OUT_HEIGHT "maxpooling_data_out_height"
