@@ -42,33 +42,33 @@ void AddChild_Find_Max(Ila& m);
 
 void DefineMaxpooling2D(Ila& m) {
 
-    // function arguments
-    auto height_in = m.input(DATA_IN_Y); // 32
-    auto width_in = m.input(DATA_IN_X);
+  // function arguments
+  auto height_in = m.input(DATA_IN_Y); // 32
+  auto width_in = m.input(DATA_IN_X);
 
-    auto pool_y_in = m.input(POOL_SIZE_Y_IN); // 8
-    auto pool_x_in = m.input(POOL_SIZE_X_IN);
+  auto pool_y_in = m.input(POOL_SIZE_Y_IN); // 8
+  auto pool_x_in = m.input(POOL_SIZE_X_IN);
 
-    auto stride_y_in = m.input(STRIDES_Y_IN); // 8
-    auto stride_x_in = m.input(STRIDES_X_IN);
+  auto stride_y_in = m.input(STRIDES_Y_IN); // 8
+  auto stride_x_in = m.input(STRIDES_X_IN);
 
-    auto pool_y = m.input(MAXPOOLING_POOL_X); // 32
-    auto pool_x = m.input(MAXPOOLING_POOL_Y);
+  auto pool_y = m.state(MAXPOOLING_POOL_X); // 32
+  auto pool_x = m.state(MAXPOOLING_POOL_Y);
 
-    auto stride_y = m.input(MAXPOOLING_STRIDE_X); // 32
-    auto stride_x = m.input(MAXPOOLING_STRIDE_Y);
+  auto stride_y = m.state(MAXPOOLING_STRIDE_X); // 32
+  auto stride_x = m.state(MAXPOOLING_STRIDE_Y);
 
-    // states used for child
-    auto flag_start = m.state(MAXPOOLING_START_FLAG); // ON/OFF
+  // states used for child
+  auto flag_start = m.state(MAXPOOLING_START_FLAG); // ON/OFF
 
-    // maxpooling state machine
-    auto state = m.state(MAXPOOLING_STATE);
+  // maxpooling state machine
+  auto state = m.state(MAXPOOLING_STATE);
 
-    auto cntr_X = m.state(MAXPOOLING_X_LOOP_CNTR);
-    auto cntr_Y = m.state(MAXPOOLING_Y_LOOP_CNTR);
+  auto cntr_X = m.state(MAXPOOLING_X_LOOP_CNTR);
+  auto cntr_Y = m.state(MAXPOOLING_Y_LOOP_CNTR);
 
-    auto height_out = m.state(MAXPOOLING_DATA_OUT_HEIGHT);
-    auto width_out = m.state(MAXPOOLING_DATA_OUT_WIDTH);
+  auto height_out = m.state(MAXPOOLING_DATA_OUT_HEIGHT);
+  auto width_out = m.state(MAXPOOLING_DATA_OUT_WIDTH);
 
   {
     auto instr = m.NewInstr(F_MAXPOOING_2D);
@@ -78,8 +78,8 @@ void DefineMaxpooling2D(Ila& m) {
 
     instr.SetDecode(func_id_match & func_run);
 
-    auto stride_y_32 = ZExt(stride_y, 32);
-    auto stride_x_32 = ZExt(stride_x, 32);
+    auto stride_y_32 = ZExt(stride_y_in, 32);
+    auto stride_x_32 = ZExt(stride_x_in, 32);
     // calculate the output tensor size
     auto height_out_tmp = height_in / stride_y_32;
     auto width_out_tmp = width_in / stride_x_32;
@@ -109,6 +109,7 @@ void DefineMaxpooling2D(Ila& m) {
 }
 
 void AddChild_Loop_Op(Ila& m) {
+
   auto child = m.NewChild("maxpooling_loop_op");
 
   auto flag_start = m.state(MAXPOOLING_START_FLAG); // ON/OFF
@@ -238,6 +239,7 @@ void AddChild_Loop_Op(Ila& m) {
 }
 
 void AddChild_Find_Max(Ila& m) {
+
   auto child_loop = m.child("maxpooling_loop_op");
   auto child_find_max = child_loop.NewChild("maxpooling_find_max_loop");
 
