@@ -178,7 +178,7 @@ void AddChild_Loop_Op(Ila& m) {
     auto cntr_Y_new = cntr_Y + 1;
     auto next_state =
         Ite(end_of_Y,
-            BvConst(MAXPOOLING_STATE_VAR_UPDATE, MAXPOOLING_STATE_BITWIDTH),
+            BvConst(MAXPOOLING_STATE_DONE, MAXPOOLING_STATE_BITWIDTH),
             BvConst(MAXPOOLING_STATE_FIND_MAX, MAXPOOLING_STATE_BITWIDTH));
 
     instr.SetUpdate(cntr_Y, cntr_Y_new);
@@ -205,6 +205,7 @@ void AddChild_Loop_Op(Ila& m) {
 
     AddChild_Find_Max(m);
   }
+
   // child instruction 4 -- write the max value back into the memory
   {
     auto instr = child.NewInstr("child_write_max_value");
@@ -215,25 +216,9 @@ void AddChild_Loop_Op(Ila& m) {
 
     auto addr = cntr_X + cntr_Y * width_out;
     auto next_state =
-        BvConst(MAXPOOLING_STATE_VAR_UPDATE, MAXPOOLING_STATE_BITWIDTH);
+        BvConst(MAXPOOLING_STATE_INC_X, MAXPOOLING_STATE_BITWIDTH);
 
     instr.SetUpdate(tensor, Store(tensor, addr, result_max));
-    instr.SetUpdate(state, next_state);
-  }
-
-  // child instruction 5 -- set flags for finish.
-  {
-    auto instr = child.NewInstr("child_update_var");
-    auto cond_flag = (flag_start == FLAG_ON);
-    auto cond_state = (state == MAXPOOLING_STATE_VAR_UPDATE);
-
-    instr.SetDecode(cond_flag & cond_state);
-
-    auto done = (cntr_X == (width_out - 1) & (cntr_Y == (height_out - 1)));
-    auto next_state =
-        Ite(done, BvConst(MAXPOOLING_STATE_DONE, MAXPOOLING_STATE_BITWIDTH),
-            BvConst(MAXPOOLING_STATE_INC_X, MAXPOOLING_STATE_BITWIDTH));
-
     instr.SetUpdate(state, next_state);
   }
 }
