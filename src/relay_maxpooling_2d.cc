@@ -154,14 +154,11 @@ void AddChild_Loop_Op(Ila& m) {
 
     auto end_of_X = (cntr_X == (width_out - 1));
 
-    auto cntr_X_new =
-        Ite(end_of_X, BvConst(0, MAXPOOLING_X_LOOP_CNTR_BITWIDTH), cntr_X + 1);
-
     auto next_state = Ite(
         end_of_X, BvConst(MAXPOOLING_STATE_INC_Y, MAXPOOLING_STATE_BITWIDTH),
         BvConst(MAXPOOLING_STATE_FIND_MAX, MAXPOOLING_STATE_BITWIDTH));
 
-    instr.SetUpdate(cntr_X, cntr_X_new);
+    instr.SetUpdate(cntr_X, cntr_X + 1);
     instr.SetUpdate(state, next_state);
   }
 
@@ -175,13 +172,13 @@ void AddChild_Loop_Op(Ila& m) {
     instr.SetDecode(cond_flag & cond_state);
 
     auto end_of_Y = (cntr_Y == (height_out - 1));
-    auto cntr_Y_new = cntr_Y + 1;
     auto next_state =
         Ite(end_of_Y,
             BvConst(MAXPOOLING_STATE_DONE, MAXPOOLING_STATE_BITWIDTH),
             BvConst(MAXPOOLING_STATE_FIND_MAX, MAXPOOLING_STATE_BITWIDTH));
 
-    instr.SetUpdate(cntr_Y, cntr_Y_new);
+    instr.SetUpdate(cntr_Y, cntr_Y + 1);
+    instr.SetUpdate(cntr_X, BvConst(0, MAXPOOLING_X_LOOP_CNTR_BITWIDTH));
     instr.SetUpdate(state, next_state);
   }
 
