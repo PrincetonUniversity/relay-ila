@@ -152,7 +152,7 @@ void AddChild_Loop_Op(Ila& m) {
 
     instr.SetDecode(cond_flag & cond_state);
 
-    auto end_of_X = (cntr_X == width_out);
+    auto end_of_X = (cntr_X == (width_out - 1));
 
     auto cntr_X_new =
         Ite(end_of_X, BvConst(0, MAXPOOLING_X_LOOP_CNTR_BITWIDTH), cntr_X + 1);
